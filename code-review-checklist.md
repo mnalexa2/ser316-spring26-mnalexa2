@@ -20,18 +20,18 @@ Review ALL source files (in main not test) in the project and identify defects u
 
 ## Defect Log
 
-| Defect ID | File          | Line(s) | Category | Description              | Severity |
-|-----------|---------------|---------|----------|--------------------------|----------|
-| 1         | Checkout.java | 312     | CS       | Improper variable naming | low      |
-| 2         | Checkout.java | 242     | FD       | Use of == for typeString | high     |
-| 3         |               |         |          |                          |          |
-| 4         |               |         |          |                          |          |
-| 5         |               |         |          |                          |          |
-| 6         |               |         |          |                          |          |
-| 7         |               |         |          |                          |          |
-| 8         |               |         |          |                          |          |
-| 9         |               |         |          |                          |          |
-| 10        |               |         |          |                          |          |
+| Defect ID | File          | Line(s) | Category | Description                      | Severity |
+|-----------|---------------|---------|----------|----------------------------------|----------|
+| 1         | Checkout.java | 312     | CS       | Improper variable naming         | low      |
+| 2         | Checkout.java | 242     | FD       | Use of == for typeString         | high     |
+| 3         | Patron.java   | 130     | CG       | Redundant method for suspended   | med      |
+| 4         | Patron.java   | 151     | FD       | missing else block               | med      |
+| 5         | Book.java     | 186     | FD       | set to 100 instead of no. copies | high     |
+| 6         |               |         |          |                                  |          |
+| 7         |               |         |          |                                  |          |
+| 8         |               |         |          |                                  |          |
+| 9         |               |         |          |                                  |          |
+| 10        |               |         |          |                                  |          |
 
 **Severity Levels:**
 - **Critical**: Causes system failure, data corruption, or security issues
