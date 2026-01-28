@@ -1,7 +1,7 @@
 # Code Review Checklist
 
-**Reviewer Name:** [Your Name]
-**Date:** [Date]
+**Reviewer Name:** Michelle N. Alexander
+**Date:** 27 Jan 2026
 **Branch:** Review
 
 ## Instructions
@@ -20,18 +20,18 @@ Review ALL source files (in main not test) in the project and identify defects u
 
 ## Defect Log
 
-| Defect ID | File | Line(s) | Category | Description | Severity |
-|-----------|------|---------|----------|-------------|----------|
-| 1 | | | | | |
-| 2 | | | | | |
-| 3 | | | | | |
-| 4 | | | | | |
-| 5 | | | | | |
-| 6 | | | | | |
-| 7 | | | | | |
-| 8 | | | | | |
-| 9 | | | | | |
-| 10 | | | | | |
+| Defect ID | File          | Line(s) | Category | Description              | Severity |
+|-----------|---------------|---------|----------|--------------------------|----------|
+| 1         | Checkout.java | 312     | CS       | Improper variable naming | low      |
+| 2         | Checkout.java | 242     | FD       | Use of == for typeString | high     |
+| 3         |               |         |          |                          |          |
+| 4         |               |         |          |                          |          |
+| 5         |               |         |          |                          |          |
+| 6         |               |         |          |                          |          |
+| 7         |               |         |          |                          |          |
+| 8         |               |         |          |                          |          |
+| 9         |               |         |          |                          |          |
+| 10        |               |         |          |                          |          |
 
 **Severity Levels:**
 - **Critical**: Causes system failure, data corruption, or security issues
