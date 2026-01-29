@@ -178,6 +178,8 @@ List any easter egg messages you observed:
 - [EASTER EGG #20]: 'Reference materials: look but don't touch.'
 - [EASTER EGG #20]: 'Stay in the library, book!'
 - [EASTER EGG #18]: 'Null checking: because null pointer exceptions are not fun.'
+- [EASTER EGG #16]: 'Library staff: because someone has to organize the chaos.'
+
 - 
 
 
@@ -199,6 +201,7 @@ List distinct bugs you identified for each implementation. Each bug must cite at
 - Bug 3: Assertion failed book count should decrease (from 4 to 3 but was 4) - Revealed by: T9
 - Bug 4: Assertion failed with wrong error code (should be 4.0 but returned 0.0) - Revealed by: T11
 - Bug 5: Assertion failed with wrong error code (should return 5.0 for reference book but returned 2.0) - Revealed by: T12
+- Bug 6: Assertion failed book count should decrease from 5 to 4 but was 5 - Revealed by: T18
 
 **Checkout1:**
 - Bug 1: Expected patron should successfully receive book for checkout but returned false - Revealed by: T3
@@ -212,6 +215,8 @@ List distinct bugs you identified for each implementation. Each bug must cite at
 - Bug 9: Assertion failed book count should remain unchanged (expected 5 but was 0) - Revealed by: T12
 - Bug 10: Priority Error: Expected suspended before null (expected 3.0 but was 2.1) - Revealed by: T17
 - Bug 10: Priority Error: Expected bull patron before null book (expected 3.0 but was 2.1) - Revealed by: T16
+- Bug 11: Assertion failed: Expected renewal code 0.1 even when at checkout limit but was 0.0 - Revealed by: T19
+- Bug 12: Assertion failed: Expected warning code for staff for 13/14 books at checkout (expected 1.1 but returned 0.0) - Revealed by: T18
 
 **Checkout2:**
 - Bug 1: Allowed checkout with wrong error code (should be 3.2 but returned 1.1) - Revealed by: T6
@@ -222,6 +227,8 @@ List distinct bugs you identified for each implementation. Each bug must cite at
 - Bug 6: Assertion failed with wrong error code (should be 4.0 but returned 0.0) - Revealed by: T11
 - Bug 7: Assertion failed with wrong error code (Should return 2.0 for 0 copies but returned 0.0) - Revealed by: T12
 - Bug 8: Assertion failed book count should remain unchanged (expected 5 but was 0) - Revealed by: T12
+- Bug 9: Expected renewal code 0.1 even when at checkout limit but was 0.0 - Revealed by: T19
+
 
 
 **Checkout3:**
@@ -230,6 +237,8 @@ List distinct bugs you identified for each implementation. Each bug must cite at
 - Bug 3: Assertion failed with wrong error code (should be 1.0 but returned 1.1) - Revealed by: T7
 - Bug 4: Assertion failed with wrong error code (should be 4.0 but returned 0.0) - Revealed by: T11
 - Bug 5: Assertion failed book count should remain unchanged (expected 5 but was 0) - Revealed by: T12
+- Bug 6: Expected renewal code 0.1 even when at checkout limit but was 3.2 - Revealed by: T19
+
 
 
 ### Comparative Analysis
