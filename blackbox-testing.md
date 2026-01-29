@@ -1,8 +1,8 @@
 # Black Box Testing Report - Assignment 2
 
-**Student Name:** [Your Name]  
-**ASU ID:** [Your ASU ID]  
-**Date:** [Date]
+**Student Name:** Michelle N. Alexander  
+**ASU ID:** mnalexa2  
+**Date:** 27 Jan 2026
 
 ---
 
@@ -24,20 +24,42 @@ Do **not** put everything into one table.
 
 ### Example EP Table: Book Availability
 
-| Partition ID | State | Valid/Invalid | Input Condition | Expected Return | Expected Behavior |
-|--------------|-------|---------------|----------------|-----------------|------------------|
-| EP 1.1 | Unavailable (0 copies) | Invalid | availableCopies == 0 AND other conditions allow checkout | 2.0 | No copies to checkout |
-| EP 1.2 | Available (1+ copies) | Valid | availableCopies > 0 AND other conditions allow checkout | Success | Book can be checked out |
+| Partition ID | State                  | Valid/Invalid | Input Condition                                          | Expected Return | Expected Behavior       |
+|--------------|------------------------|---------------|----------------------------------------------------------|-----------------|-------------------------|
+| EP 1.1       | Unavailable (0 copies) | Invalid       | availableCopies == 0 AND other conditions allow checkout | 2.0             | No copies to checkout   |
+| EP 1.2       | Available (1+ copies)  | Valid         | availableCopies > 0 AND other conditions allow checkout  | Success         | Book can be checked out |
+|              |                        |               |                                                          |                 |                         |
+|              |                        |               |                                                          |                 |                         |
 
 **Example test cases:** `testBookAvailable()`, `testUnavailableBook()`
 
 ---
 
-### Your EP Tables (add as many as needed)
+### EP Tables: Patron Eligibility
 
-| Partition ID | State | Valid/Invalid | Input Condition | Expected Return | Expected Behavior |
-|--------------|-------|---------------|----------------|-----------------|------------------|
-| EP ___ | | | | | |
+| Partition ID | State                         | Valid/Invalid | Input Condition                            | Expected Return | Expected Behavior                                         |
+|--------------|-------------------------------|---------------|--------------------------------------------|-----------------|-----------------------------------------------------------|
+| EP 2.0       | Eligible (no suspension)      | Valid         | isAccountSuspended == false and fines < 10 | 0.0             | Book added to checkout list and available copies decrease |
+| EP 2.1       | Not eligible (suspended)      | Invalid       | isAccountSuspended == true                 | 3.0             | Checkout rejected/ no change to Patron                    |
+| EP 2.2       | Not eligible (fines too high) | Invalid       | getFineBalance >= 10                       | 4.1             | Checkout rejected/ no change to Patron                    |
+
+---
+### EP Tables: Patron Renewal
+
+| Partition ID | State                      | Valid/Invalid | Input Condition              | Expected Return | Expected Behavior                     |
+|--------------|----------------------------|---------------|------------------------------|-----------------|---------------------------------------|
+| EP 3.0       | Renewal (no overdue books) | Valid         | patron has book checkout     | 0.1             | Due date updated; no change to copies |
+| EP 3.1       | Renewal (overdue warning)  | Valid         | patron has one or two books  | 1.0             | Checkout approved/ warning issued     |
+| EP 3.2       | Renewal (near limit)       | Valid         | patron within 2 of max limit | 1.1             | Checkout approved/ warning issued     |
+
+---
+### EP Tables: Book state
+
+| Partition ID | State          | Valid/Invalid | Input Condition                | Expected Return | Expected Behavior                         |
+|--------------|----------------|---------------|--------------------------------|-----------------|-------------------------------------------|
+| EP 4.0       | Reference-only | Invalid       | book.isReferenceOnly() == true | 5.0             | checkout rejected; no state change        |
+| EP 4.1       | Null book      | Invalid       | book == null                   | 2.1             | return error immediately; no state change |
+| EP 4.2       | Null patron    | Invlid        | patron == null                 | 3.1             | return error immediately; no state change |
 
 ---
 
@@ -47,20 +69,42 @@ Important BVA cases may overlap with EP. That is OK. You can reference all relev
 
 ### Example BVA Table: Overdue Count (Threshold: 3)
 
-| Test ID | Boundary | Input Value | Expected Return | Rationale |
-|---------|----------|-------------|-----------------|-----------|
-| BVA 1.1 | Below | overdueCount = 0 | Success (depends on other setup) | Below warning threshold |
-| BVA 1.2 | Warning High | overdueCount = 2 | 1.0 | Just below reject threshold |
-| BVA 1.3 | At | overdueCount = 3 | 4.0 | At rejection boundary |
-| BVA 1.4 | Above | overdueCount = 4 | 4.0 | Above rejection boundary |
+| Test ID | Boundary     | Input Value      | Expected Return                  | Rationale                   |
+|---------|--------------|------------------|----------------------------------|-----------------------------|
+| BVA 1.1 | Below        | overdueCount = 0 | Success (depends on other setup) | Below warning threshold     |
+| BVA 1.2 | Warning High | overdueCount = 2 | 1.0                              | Just below reject threshold |
+| BVA 1.3 | At           | overdueCount = 3 | 4.0                              | At rejection boundary       |
+| BVA 1.4 | Above        | overdueCount = 4 | 4.0                              | Above rejection boundary    |
 
 ---
 
-### Your BVA Tables (add more as needed)
+### BVA Tables Fine Count 2
 
-| Test ID | Boundary | Input Value | Expected Return | Rationale |
-|---------|----------|-------------|-----------------|-----------|
-| BVA ___ | | | | |
+| Test ID | Boundary | Input Value | Expected Return | Rationale                            |
+|---------|----------|-------------|-----------------|--------------------------------------|
+| BVA 2.1 | Below    | 9.00        | 0.0             | Below rejection threshold            |
+| BVA 2.2 | At       | 10.00       | 4.1             | At threshold where checkout rejected |
+| BVA 2.3 | Above    | 11.00       | 4.1             | Beyond rejection threshold           |
+
+---
+### BVA Tables Overdue Limits
+
+| Test ID | Boundary     | Input Value          | Expected Return | Rationale                    |
+|---------|--------------|----------------------|-----------------|------------------------------|
+| BVA 3.1 | Below        | Student has 8 books  | 1.1             | Within 10 book limit         |
+| BVA 3.2 | Exact Limit  | Student has 10 books | 1.1             | At limit                     |
+| BVA 3.3 | Beyond Limit | Student has 11 books | 3.2             | Beyond 10 book limit         |
+| BVA 3.4 | Overdue      | Two overdue books    | 1.0             | Max allowed before rejection |
+
+---
+### BVA Patron Type Limits
+
+| Test ID | Boundary          | Input Value                   | Expected Return | Rationale           |
+|---------|-------------------|-------------------------------|-----------------|---------------------|
+| BVA 4.1 | Child Limit       | child has 3 books checked out | 1.1             | Warning: at limit   |
+| BVA 4.2 | Child Over Limit  | child 4th book attempt        | 3.2             | Exceed child limit  |
+| BVA 4.3 | Public Limit      | 5 books checked out           | 1.1             | Warning: at limit   |
+| BVA 4.4 | Public Over Limit | 5th book attempt              | 3.2             | Exceed public limit |
 
 ---
 
@@ -81,10 +125,28 @@ At least some of your tests should verify observable state changes, not just ret
 
 **Checkout0-3 Columns:** Mark each implementation as Pass (✓) or Fail (✗) for this test case. This helps you track which implementations have bugs and will be useful for Part 4 analysis.
 
-| Test ID Name | EP/BVA | Input Description | Expected Return | Expected State Changes | Checkout0 | Checkout1 | Checkout2 | Checkout3 |
-|--------------|--------|-------------------|-----------------|------------------------|-----------|-----------|-----------|-----------|
-| T1 testUnavailableBook | EP 1.1 | Book unavailable (0 copies), eligible patron | 2.0 | No state change | ✓ | ✓ | ✗ | ✓ |
-| T2 testBookAvailable | EP 1.2 | Book available (1+ copies), eligible patron, no warnings normal checkout | 0.0 | Patron map updated; copies of book change | ✗ | ✗ | ✓ | ✓ |
+| Test ID Name             | EP/BVA  | Input Description                          | Expected Return | Expected State Changes                            | Checkout0 | Checkout1 | Checkout2 | Checkout3 |
+|--------------------------|---------|--------------------------------------------|-----------------|---------------------------------------------------|-----------|-----------|-----------|-----------|
+| T1 testSuspendedPatron   | EP 2.1  | isAccountSuspended == true, book available | 3.0             | No state change to patron or book                 | ✓         | ✓         | ✗         | ✓         |
+| T2 testFineAtBoundary    | BVA 2.2 | Patron with 10.00 in fines, book available | 4.1             | no state change                                   | ✗         | ✗         | ✓         | ✓         |
+| T3 testFineBelowBoundary | BVA 2.1 | Patron with 9.00 in fines                  | 0.0             | Book count -1; book added to patron checkout list |           |           |           |           |
+| T4 testRenewal           | EP 3.1  | Patron has ISBN checked out                | 0.1             | Due date reset; no change to available copies     |           |           |           |           |
+| T5 testOverdueWarnHigh   | BVA 3.4 | Patron with exactly 2 overdue books        | 1.0             | Book count -1; book added to patron checkout list |           |           |           |           |
+| T6 testStudentNearLimit  |         |                                            |                 |                                                   |           |           |           |           |
+| T7                       |         |                                            |                 |                                                   |           |           |           |           |
+| T8                       |         |                                            |                 |                                                   |           |           |           |           |
+| T9                       |         |                                            |                 |                                                   |           |           |           |           |
+| T10                      |         |                                            |                 |                                                   |           |           |           |           |
+| T11                      |         |                                            |                 |                                                   |           |           |           |           |
+| T12                      |         |                                            |                 |                                                   |           |           |           |           |
+| T13                      |         |                                            |                 |                                                   |           |           |           |           |
+| T14                      |         |                                            |                 |                                                   |           |           |           |           |
+| T15                      |         |                                            |                 |                                                   |           |           |           |           |
+| T16                      |         |                                            |                 |                                                   |           |           |           |           |
+| T17                      |         |                                            |                 |                                                   |           |           |           |           |
+| T18                      |         |                                            |                 |                                                   |           |           |           |           |
+| T19                      |         |                                            |                 |                                                   |           |           |           |           |
+| T20                      |         |                                            |                 |                                                   |           |           |           |           |
 
 (Add rows until you have at least 20.)
 
@@ -100,11 +162,11 @@ List any easter egg messages you observed:
 ### Implementation Results
 
 | Implementation | Bugs Found (count) |
-|----------------|---------------------|
-| Checkout0      | |
-| Checkout1      | |
-| Checkout2      | |
-| Checkout3      | |
+|----------------|--------------------|
+| Checkout0      |                    |
+| Checkout1      |                    |
+| Checkout2      |                    |
+| Checkout3      |                    |
 
 ### Bugs Discovered
 List distinct bugs you identified for each implementation. Each bug must cite at least one test case that revealed it.
@@ -133,7 +195,7 @@ Compare the four implementations:
 
 **Which testing technique was most effective for finding bugs?**
 
-**What was the most challenging aspect of this assignment?**
+**What was the most challenging aspect of this assignment?Sorting through what to do; getting organized**
 
 **How did you decide on your EP and BVA?**
 
