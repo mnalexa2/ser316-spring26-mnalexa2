@@ -165,7 +165,10 @@ List any easter egg messages you observed:
 - [EASTER EGG #13]: 'Limits exist to be thoroughly tested.'
 - [EASTER EGG #13]: 'The difference between theory and practice is that in theory, there is no difference.'
 - [EASTER EGG #13]: 'Boundaries are where bugs hide.'
-- 
+- [EASTER EGG #15.1]: https://www.youtube.com/watch?v=xvFZjo5PgG0
+- [EASTER EGG #14]: 'Renew, reuse, recycle... books.'
+- [EASTER EGG #14]: 'A book renewed is a book re-loved.'
+- [EASTER EGG #14]: 'Renewing a book is like giving it a second chance.'
 
 
 ### Implementation Results
@@ -181,19 +184,24 @@ List any easter egg messages you observed:
 List distinct bugs you identified for each implementation. Each bug must cite at least one test case that revealed it.
 
 **Checkout0:**
-- Bug 1: 
+- Bug 1: Assertion failed with wrong error code (should be 1.0 but returned 0.0) - Revealed by: T5
 
 **Checkout1:**
 - Bug 1: Expected patron should successfully receive book for checkout but returned false - Revealed by: T3
 - Bug 2: Allowed checkout (return code 0.0) when student exceeded limit - Revealed by: T6
 - Bug 3: Returned wrong error code (should be 3.2 but returned 0.0) - Revealed by: T8
 - Bug 4: Returned wrong error code (should be 3.2 but returned 0.0) - Revealed by: T10
+- Bug 5: Assertion failed with wrong error code (should be 1.0 but returned 0.0) - Revealed by: T5
 
 **Checkout2:**
 - Bug 1: Allowed checkout with wrong error code (should be 3.2 but returned 1.1) - Revealed by: T6
 - Bug 2: Expected book count to decrease (from 5 to 4) but did not - Revealed by: T3
+- Bug 3: Assertion failed with wrong error code (should be 0.1 but returned 0.0) - Revealed by: T4
+- Bug 4: Assertion failed with wrong error code (should be 1.0 but returned 0.0) - Revealed by: T5
 
 **Checkout3:**
+- Bug 1: Copies for renewal should not change (should be 1 but returned 0) - Revealed by: T4
+- Bug 2: Assertion failed with wrong error code (should be 1.0 but returned 0.0) - Revealed by: T5
 
 ### Comparative Analysis
 Compare the four implementations:
