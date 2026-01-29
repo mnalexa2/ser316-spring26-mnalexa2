@@ -99,14 +99,15 @@ Important BVA cases may overlap with EP. That is OK. You can reference all relev
 ---
 ### BVA Patron Type Limits
 
-| Test ID | Boundary          | Input Value          | Expected Return | Rationale                     |
-|---------|-------------------|----------------------|-----------------|-------------------------------|
-| BVA 4.1 | Child Limit       | 3 books checked out  | 1.1             | Warning: at limit             |
-| BVA 4.2 | Child Over Limit  | 4th book attempt     | 3.2             | Rejection: Exceed child limit |
-| BVA 4.3 | Public Limit      | 5 books checked out  | 1.1             | Warning: at limit             |
-| BVA 4.4 | Public Over Limit | 6th book attempt     | 3.2             | Exceed public limit           |
-| BVA 4.5 | Staff Near Limit  | 13 books checked out | 1.1             | Warning: approaching limit    |
-| BVA 4.6 | Staff Over Limit  | 16th book attempt    | 3.2             | Exceed staff limit            |
+| Test ID | Boundary           | Input Value          | Expected Return | Rationale                     |
+|---------|--------------------|----------------------|-----------------|-------------------------------|
+| BVA 4.1 | Child Limit        | 3 books checked out  | 1.1             | Warning: at limit             |
+| BVA 4.2 | Child Over Limit   | 4th book attempt     | 3.2             | Rejection: Exceed child limit |
+| BVA 4.3 | Public Limit       | 5 books checked out  | 1.1             | Warning: at limit             |
+| BVA 4.4 | Public Over Limit  | 6th book attempt     | 3.2             | Exceed public limit           |
+| BVA 4.5 | Staff Near Limit   | 13 books checked out | 1.1             | Warning: approaching limit    |
+| BVA 4.6 | Staff Over Limit   | 16th book attempt    | 3.2             | Exceed staff limit            |
+| BVA 4.6 | Student Over Limit | 16th book attempt    | 3.2             | Exceed student limit          |
 
 ---
 
@@ -134,7 +135,7 @@ At least some of your tests should verify observable state changes, not just ret
 | T3 testFineBelowBoundary | BVA 2.1 | Patron with 9.00 in fines, book available            | 0.0             | Book count -1; book added to patron checkout list |           |           |           |           |
 | T4 testRenewal           | EP 3.0  | Patron has book checked out                          | 0.1             | Due date reset; no change to available copies     |           |           |           |           |
 | T5 testOverdueWarnHigh   | BVA 3.4 | Patron with exactly 2 overdue books                  | 1.0             | Book count -1; book added to patron checkout list |           |           |           |           |
-| T6 testStudentOverLimit  | BVA 4.4 | Student has 10 books checked out; attempt 11th       | 3.2             | No state change to book or patron                 |           |           |           |           |
+| T6 testStudentOverLimit  | BVA 4.6 | Student has 10 books checked out; attempt 11th       | 3.2             | No state change to book or patron                 |           |           |           |           |
 | T7 testChildAtLimit      | BVA 4.1 | Child has 2 books checked out; attempt 3rd           | 1.1             | Book count -1; child now has 3 books              |           |           |           |           |
 | T8 testChildOverLimit    | BVA 4.2 | Child has 3 books checked out; attempt 4th           | 3.2             | No state change                                   |           |           |           |           |
 | T9 testPublicAtLimit     | BVA 4.3 | Public has 4 books checked out; attempt 5th          | 1.1             | Book count -1; public now has 5 books             |           |           |           |           |
@@ -158,8 +159,14 @@ At least some of your tests should verify observable state changes, not just ret
 
 ### Easter Eggs Found
 List any easter egg messages you observed:
+- [EASTER EGG #15.2]: ...xvFZjo5PgG0 (test renewal to complete!)
+- [EASTER EGG #10.1/3]: 'Testing can show the presence of bugs,'
+- [EASTER EGG #17]: 'The happy path matters too.'
+- [EASTER EGG #13]: 'Limits exist to be thoroughly tested.'
+- [EASTER EGG #13]: 'The difference between theory and practice is that in theory, there is no difference.'
+- [EASTER EGG #13]: 'Boundaries are where bugs hide.'
 - 
-- 
+
 
 ### Implementation Results
 
@@ -174,16 +181,19 @@ List any easter egg messages you observed:
 List distinct bugs you identified for each implementation. Each bug must cite at least one test case that revealed it.
 
 **Checkout0:**
-- Bug 1: [Brief description] — Revealed by: [Test ID]
+- Bug 1: 
 
 **Checkout1:**
-- Bug 1: [Brief description] — Revealed by: [Test ID]
+- Bug 1: Expected patron should successfully receive book for checkout but returned false - Revealed by: T3
+- Bug 2: Allowed checkout (return code 0.0) when student exceeded limit - Revealed by: T6
+- Bug 3: Returned wrong error code (should be 3.2 but returned 0.0) - Revealed by: T8
+- Bug 4: Returned wrong error code (should be 3.2 but returned 0.0) - Revealed by: T10
 
 **Checkout2:**
-- Bug 1: [Brief description] — Revealed by: [Test ID]
+- Bug 1: Allowed checkout with wrong error code (should be 3.2 but returned 1.1) - Revealed by: T6
+- Bug 2: Expected book count to decrease (from 5 to 4) but did not - Revealed by: T3
 
 **Checkout3:**
-- Bug 1: [Brief description] — Revealed by: [Test ID]
 
 ### Comparative Analysis
 Compare the four implementations:
@@ -197,9 +207,9 @@ Compare the four implementations:
 
 **Which testing technique was most effective for finding bugs?**
 
-**What was the most challenging aspect of this assignment?Sorting through what to do; getting organized**
+**What was the most challenging aspect of this assignment? Sorting through what to do; getting organized**
 
-**How did you decide on your EP and BVA?**
+**How did you decide on your EP and BVA? I made a flow diagram first**
 
 **Describe one test where checking only the return value would NOT have been sufficient to detect a bug.**
 
