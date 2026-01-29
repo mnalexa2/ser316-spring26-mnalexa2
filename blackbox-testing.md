@@ -59,7 +59,7 @@ Do **not** put everything into one table.
 |--------------|----------------|---------------|--------------------------------|-----------------|-------------------------------------------|
 | EP 4.0       | Reference-only | Invalid       | book.isReferenceOnly() == true | 5.0             | checkout rejected; no state change        |
 | EP 4.1       | Null book      | Invalid       | book == null                   | 2.1             | return error immediately; no state change |
-| EP 4.2       | Null patron    | Invlid        | patron == null                 | 3.1             | return error immediately; no state change |
+| EP 4.2       | Null patron    | Invalid       | patron == null                 | 3.1             | return error immediately; no state change |
 
 ---
 
@@ -78,7 +78,7 @@ Important BVA cases may overlap with EP. That is OK. You can reference all relev
 
 ---
 
-### BVA Tables Fine Count 2
+### BVA Tables Fine Count 
 
 | Test ID | Boundary | Input Value | Expected Return | Rationale                            |
 |---------|----------|-------------|-----------------|--------------------------------------|
@@ -89,22 +89,24 @@ Important BVA cases may overlap with EP. That is OK. You can reference all relev
 ---
 ### BVA Tables Overdue Limits
 
-| Test ID | Boundary     | Input Value          | Expected Return | Rationale                    |
-|---------|--------------|----------------------|-----------------|------------------------------|
-| BVA 3.1 | Below        | Student has 8 books  | 1.1             | Within 10 book limit         |
-| BVA 3.2 | Exact Limit  | Student has 10 books | 1.1             | At limit                     |
-| BVA 3.3 | Beyond Limit | Student has 11 books | 3.2             | Beyond 10 book limit         |
-| BVA 3.4 | Overdue      | Two overdue books    | 1.0             | Max allowed before rejection |
+| Test ID | Boundary | Input Value     | Expected Return | Rationale                  |
+|---------|----------|-----------------|-----------------|----------------------------|
+| BVA 3.1 | Below    | 0 overdue books | 0.0             | no warnings/rejections     |
+| BVA 3.2 | High     | 2 overdue books | 1.0             | Maximum allowed/warning    |
+| BVA 3.3 | At Limit | 3 overdue books | 4.0             | Boundary for rejection     |
+| BVA 3.4 | Above    | 4 overdue books | 4.0             | Beyond rejection threshold |
 
 ---
 ### BVA Patron Type Limits
 
-| Test ID | Boundary          | Input Value                   | Expected Return | Rationale           |
-|---------|-------------------|-------------------------------|-----------------|---------------------|
-| BVA 4.1 | Child Limit       | child has 3 books checked out | 1.1             | Warning: at limit   |
-| BVA 4.2 | Child Over Limit  | child 4th book attempt        | 3.2             | Exceed child limit  |
-| BVA 4.3 | Public Limit      | 5 books checked out           | 1.1             | Warning: at limit   |
-| BVA 4.4 | Public Over Limit | 5th book attempt              | 3.2             | Exceed public limit |
+| Test ID | Boundary          | Input Value          | Expected Return | Rationale                     |
+|---------|-------------------|----------------------|-----------------|-------------------------------|
+| BVA 4.1 | Child Limit       | 3 books checked out  | 1.1             | Warning: at limit             |
+| BVA 4.2 | Child Over Limit  | 4th book attempt     | 3.2             | Rejection: Exceed child limit |
+| BVA 4.3 | Public Limit      | 5 books checked out  | 1.1             | Warning: at limit             |
+| BVA 4.4 | Public Over Limit | 6th book attempt     | 3.2             | Exceed public limit           |
+| BVA 4.5 | Staff Near Limit  | 13 books checked out | 1.1             | Warning: approaching limit    |
+| BVA 4.6 | Staff Over Limit  | 16th book attempt    | 3.2             | Exceed staff limit            |
 
 ---
 
@@ -125,28 +127,28 @@ At least some of your tests should verify observable state changes, not just ret
 
 **Checkout0-3 Columns:** Mark each implementation as Pass (✓) or Fail (✗) for this test case. This helps you track which implementations have bugs and will be useful for Part 4 analysis.
 
-| Test ID Name             | EP/BVA  | Input Description                          | Expected Return | Expected State Changes                            | Checkout0 | Checkout1 | Checkout2 | Checkout3 |
-|--------------------------|---------|--------------------------------------------|-----------------|---------------------------------------------------|-----------|-----------|-----------|-----------|
-| T1 testSuspendedPatron   | EP 2.1  | isAccountSuspended == true, book available | 3.0             | No state change to patron or book                 | ✓         | ✓         | ✗         | ✓         |
-| T2 testFineAtBoundary    | BVA 2.2 | Patron with 10.00 in fines, book available | 4.1             | no state change                                   | ✗         | ✗         | ✓         | ✓         |
-| T3 testFineBelowBoundary | BVA 2.1 | Patron with 9.00 in fines                  | 0.0             | Book count -1; book added to patron checkout list |           |           |           |           |
-| T4 testRenewal           | EP 3.1  | Patron has ISBN checked out                | 0.1             | Due date reset; no change to available copies     |           |           |           |           |
-| T5 testOverdueWarnHigh   | BVA 3.4 | Patron with exactly 2 overdue books        | 1.0             | Book count -1; book added to patron checkout list |           |           |           |           |
-| T6 testStudentNearLimit  |         |                                            |                 |                                                   |           |           |           |           |
-| T7                       |         |                                            |                 |                                                   |           |           |           |           |
-| T8                       |         |                                            |                 |                                                   |           |           |           |           |
-| T9                       |         |                                            |                 |                                                   |           |           |           |           |
-| T10                      |         |                                            |                 |                                                   |           |           |           |           |
-| T11                      |         |                                            |                 |                                                   |           |           |           |           |
-| T12                      |         |                                            |                 |                                                   |           |           |           |           |
-| T13                      |         |                                            |                 |                                                   |           |           |           |           |
-| T14                      |         |                                            |                 |                                                   |           |           |           |           |
-| T15                      |         |                                            |                 |                                                   |           |           |           |           |
-| T16                      |         |                                            |                 |                                                   |           |           |           |           |
-| T17                      |         |                                            |                 |                                                   |           |           |           |           |
-| T18                      |         |                                            |                 |                                                   |           |           |           |           |
-| T19                      |         |                                            |                 |                                                   |           |           |           |           |
-| T20                      |         |                                            |                 |                                                   |           |           |           |           |
+| Test ID Name             | EP/BVA  | Input Description                                    | Expected Return | Expected State Changes                            | Checkout0 | Checkout1 | Checkout2 | Checkout3 |
+|--------------------------|---------|------------------------------------------------------|-----------------|---------------------------------------------------|-----------|-----------|-----------|-----------|
+| T1 testSuspendedPatron   | EP 2.1  | isAccountSuspended == true, book available           | 3.0             | No state change to patron or book                 | ✓         | ✓         | ✗         | ✓         |
+| T2 testFineAtBoundary    | BVA 2.2 | Patron with 10.00 in fines, book available           | 4.1             | No state change                                   | ✗         | ✗         | ✓         | ✓         |
+| T3 testFineBelowBoundary | BVA 2.1 | Patron with 9.00 in fines, book available            | 0.0             | Book count -1; book added to patron checkout list |           |           |           |           |
+| T4 testRenewal           | EP 3.0  | Patron has book checked out                          | 0.1             | Due date reset; no change to available copies     |           |           |           |           |
+| T5 testOverdueWarnHigh   | BVA 3.4 | Patron with exactly 2 overdue books                  | 1.0             | Book count -1; book added to patron checkout list |           |           |           |           |
+| T6 testStudentOverLimit  | BVA 4.4 | Student has 10 books checked out; attempt 11th       | 3.2             | No state change to book or patron                 |           |           |           |           |
+| T7 testChildAtLimit      | BVA 4.1 | Child has 2 books checked out; attempt 3rd           | 1.1             | Book count -1; child now has 3 books              |           |           |           |           |
+| T8 testChildOverLimit    | BVA 4.2 | Child has 3 books checked out; attempt 4th           | 3.2             | No state change                                   |           |           |           |           |
+| T9 testPublicAtLimit     | BVA 4.3 | Public has 4 books checked out; attempt 5th          | 1.1             | Book count -1; public now has 5 books             |           |           |           |           |
+| T10 testPublicOverLimit  | BVA 4.4 | Public has 5 books checked out; attempt 6th          | 3.2             | No state change                                   |           |           |           |           |
+| T11 testOverdueReject    | BVA 3.3 | Patron has 3 overdue books                           | 4.0             | No state change                                   |           |           |           |           |
+| T12 testBookUnavailable  | EP 1.1  | available copies == 0                                | 2.0             | No state change to patron list                    |           |           |           |           |
+| T13 testReferenceBook    | EP 4.0  | Book not available for checkout (Reference)          | 5.0             | No state change                                   |           |           |           |           |
+| T14 testBookNull         | EP 4.2  | Book object == null                                  | 2.1             | No state change                                   |           |           |           |           |
+| T15 testPatronNull       | EP 4.2  | Patron == null                                       | 3.1             | No state change                                   |           |           |           |           |
+| T16 testPriorityPatron   | EP 4.2  | Both patron == null and book == null                 | 3.1             | No state change; patron checked first             |           |           |           |           |
+| T17 testPatronSuspended  | EP 2.1  | Suspended patron and book == null                    | 3.0             | No state change; checks eligibility first         |           |           |           |           |
+| T18 testStaffNearLimit   | BVA 4.5 | Staff has 13 books checked out; attempt 14th         | 1.1             | Book count -1; staff now has 14 books             |           |           |           |           |
+| T19 testRenewalOverLimit | EP 3.0  | Student with 10 books renewing current               | 0.1             | No change to available copies; due date updated   |           |           |           |           |
+| T20 testSuccessCheckout  | EP 1.2  | Normal checkout with eligible patron and no warnings | 0.0             | Book count -1; patron list updated                |           |           |           |           |
 
 (Add rows until you have at least 20.)
 
