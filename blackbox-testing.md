@@ -169,6 +169,16 @@ List any easter egg messages you observed:
 - [EASTER EGG #14]: 'Renew, reuse, recycle... books.'
 - [EASTER EGG #14]: 'A book renewed is a book re-loved.'
 - [EASTER EGG #14]: 'Renewing a book is like giving it a second chance.'
+- [EASTER EGG #19]: 'Availability testing finds the books that aren't there.'
+- [EASTER EGG #19]: 'Can't check out what isn't there.'
+- [EASTER EGG #19]: 'Good EP testing checks all partitions.'
+- [EASTER EGG #19]: 'Testing the sad path matters.'
+- [EASTER EGG #20]: 'Reference books are meant to be consulted, not carried home.'
+- [EASTER EGG #20]: 'These books stay home.'
+- [EASTER EGG #20]: 'Reference materials: look but don't touch.'
+- [EASTER EGG #20]: 'Stay in the library, book!'
+- [EASTER EGG #18]: 'Null checking: because null pointer exceptions are not fun.'
+- 
 
 
 ### Implementation Results
@@ -185,6 +195,10 @@ List distinct bugs you identified for each implementation. Each bug must cite at
 
 **Checkout0:**
 - Bug 1: Assertion failed with wrong error code (should be 1.0 but returned 0.0) - Revealed by: T5
+- Bug 2: Assertion failed with wrong error code (should be 1.0 but returned 1.1) - Revealed by: T7
+- Bug 3: Assertion failed book count should decrease (from 4 to 3 but was 4) - Revealed by: T9
+- Bug 4: Assertion failed with wrong error code (should be 4.0 but returned 0.0) - Revealed by: T11
+- Bug 5: Assertion failed with wrong error code (should return 5.0 for reference book but returned 2.0) - Revealed by: T12
 
 **Checkout1:**
 - Bug 1: Expected patron should successfully receive book for checkout but returned false - Revealed by: T3
@@ -192,16 +206,31 @@ List distinct bugs you identified for each implementation. Each bug must cite at
 - Bug 3: Returned wrong error code (should be 3.2 but returned 0.0) - Revealed by: T8
 - Bug 4: Returned wrong error code (should be 3.2 but returned 0.0) - Revealed by: T10
 - Bug 5: Assertion failed with wrong error code (should be 1.0 but returned 0.0) - Revealed by: T5
+- Bug 6: Assertion failed with wrong error code (should be 1.0 but returned 0.0) - Revealed by: T7
+- Bug 7: Assertion failed book count should decrease (from 4 to 3 but was 4) - Revealed by: T9
+- Bug 8: Assertion failed with wrong error code (should be 4.0 but returned 0.0) - Revealed by: T11
+- Bug 9: Assertion failed book count should remain unchanged (expected 5 but was 0) - Revealed by: T12
+- Bug 10: Priority Error: Expected suspended before null (expected 3.0 but was 2.1) - Revealed by: T17
+- Bug 10: Priority Error: Expected bull patron before null book (expected 3.0 but was 2.1) - Revealed by: T16
 
 **Checkout2:**
 - Bug 1: Allowed checkout with wrong error code (should be 3.2 but returned 1.1) - Revealed by: T6
 - Bug 2: Expected book count to decrease (from 5 to 4) but did not - Revealed by: T3
 - Bug 3: Assertion failed with wrong error code (should be 0.1 but returned 0.0) - Revealed by: T4
 - Bug 4: Assertion failed with wrong error code (should be 1.0 but returned 0.0) - Revealed by: T5
+- Bug 5: Assertion failed with wrong error code (should be 1.0 but returned 1.1) - Revealed by: T7
+- Bug 6: Assertion failed with wrong error code (should be 4.0 but returned 0.0) - Revealed by: T11
+- Bug 7: Assertion failed with wrong error code (Should return 2.0 for 0 copies but returned 0.0) - Revealed by: T12
+- Bug 8: Assertion failed book count should remain unchanged (expected 5 but was 0) - Revealed by: T12
+
 
 **Checkout3:**
 - Bug 1: Copies for renewal should not change (should be 1 but returned 0) - Revealed by: T4
 - Bug 2: Assertion failed with wrong error code (should be 1.0 but returned 0.0) - Revealed by: T5
+- Bug 3: Assertion failed with wrong error code (should be 1.0 but returned 1.1) - Revealed by: T7
+- Bug 4: Assertion failed with wrong error code (should be 4.0 but returned 0.0) - Revealed by: T11
+- Bug 5: Assertion failed book count should remain unchanged (expected 5 but was 0) - Revealed by: T12
+
 
 ### Comparative Analysis
 Compare the four implementations:
