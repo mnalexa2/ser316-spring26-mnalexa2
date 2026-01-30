@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * The parameterized structure allows testing all Checkout implementations
  * with the same tests to identify which implementations have bugs.
  */
-public class BlackBox {
+public class CheckoutBlackboxSample {
 
     private Checkout checkout;
 
