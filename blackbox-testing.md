@@ -44,6 +44,7 @@ Do **not** put everything into one table.
 | EP 2.2       | Not eligible (fines too high) | Invalid       | getFineBalance >= 10                       | 4.1             | Checkout rejected/ no change to Patron                    |
 
 ---
+
 ### EP Tables: Patron Renewal
 
 | Partition ID | State                      | Valid/Invalid | Input Condition              | Expected Return | Expected Behavior                     |
@@ -53,6 +54,7 @@ Do **not** put everything into one table.
 | EP 3.2       | Renewal (near limit)       | Valid         | patron within 2 of max limit | 1.1             | Checkout approved/ warning issued     |
 
 ---
+
 ### EP Tables: Book state
 
 | Partition ID | State          | Valid/Invalid | Input Condition                | Expected Return | Expected Behavior                         |
@@ -87,6 +89,7 @@ Important BVA cases may overlap with EP. That is OK. You can reference all relev
 | BVA 2.3 | Above    | 11.00       | 4.1             | Beyond rejection threshold           |
 
 ---
+
 ### BVA Tables Overdue Limits
 
 | Test ID | Boundary | Input Value     | Expected Return | Rationale                  |
@@ -97,6 +100,7 @@ Important BVA cases may overlap with EP. That is OK. You can reference all relev
 | BVA 3.4 | Above    | 4 overdue books | 4.0             | Beyond rejection threshold |
 
 ---
+
 ### BVA Patron Type Limits
 
 | Test ID | Boundary           | Input Value          | Expected Return | Rationale                     |
@@ -130,26 +134,26 @@ At least some of your tests should verify observable state changes, not just ret
 
 | Test ID Name             | EP/BVA  | Input Description                                    | Expected Return | Expected State Changes                            | Checkout0 | Checkout1 | Checkout2 | Checkout3 |
 |--------------------------|---------|------------------------------------------------------|-----------------|---------------------------------------------------|-----------|-----------|-----------|-----------|
-| T1 testSuspendedPatron   | EP 2.1  | isAccountSuspended == true, book available           | 3.0             | No state change to patron or book                 | ✓         | ✓         | ✗         | ✓         |
-| T2 testFineAtBoundary    | BVA 2.2 | Patron with 10.00 in fines, book available           | 4.1             | No state change                                   | ✗         | ✗         | ✓         | ✓         |
-| T3 testFineBelowBoundary | BVA 2.1 | Patron with 9.00 in fines, book available            | 0.0             | Book count -1; book added to patron checkout list |           |           |           |           |
-| T4 testRenewal           | EP 3.0  | Patron has book checked out                          | 0.1             | Due date reset; no change to available copies     |           |           |           |           |
-| T5 testOverdueWarnHigh   | BVA 3.4 | Patron with exactly 2 overdue books                  | 1.0             | Book count -1; book added to patron checkout list |           |           |           |           |
-| T6 testStudentOverLimit  | BVA 4.6 | Student has 10 books checked out; attempt 11th       | 3.2             | No state change to book or patron                 |           |           |           |           |
-| T7 testChildAtLimit      | BVA 4.1 | Child has 2 books checked out; attempt 3rd           | 1.1             | Book count -1; child now has 3 books              |           |           |           |           |
-| T8 testChildOverLimit    | BVA 4.2 | Child has 3 books checked out; attempt 4th           | 3.2             | No state change                                   |           |           |           |           |
-| T9 testPublicAtLimit     | BVA 4.3 | Public has 4 books checked out; attempt 5th          | 1.1             | Book count -1; public now has 5 books             |           |           |           |           |
-| T10 testPublicOverLimit  | BVA 4.4 | Public has 5 books checked out; attempt 6th          | 3.2             | No state change                                   |           |           |           |           |
-| T11 testOverdueReject    | BVA 3.3 | Patron has 3 overdue books                           | 4.0             | No state change                                   |           |           |           |           |
-| T12 testBookUnavailable  | EP 1.1  | available copies == 0                                | 2.0             | No state change to patron list                    |           |           |           |           |
-| T13 testReferenceBook    | EP 4.0  | Book not available for checkout (Reference)          | 5.0             | No state change                                   |           |           |           |           |
-| T14 testBookNull         | EP 4.2  | Book object == null                                  | 2.1             | No state change                                   |           |           |           |           |
-| T15 testPatronNull       | EP 4.2  | Patron == null                                       | 3.1             | No state change                                   |           |           |           |           |
-| T16 testPriorityPatron   | EP 4.2  | Both patron == null and book == null                 | 3.1             | No state change; patron checked first             |           |           |           |           |
-| T17 testPatronSuspended  | EP 2.1  | Suspended patron and book == null                    | 3.0             | No state change; checks eligibility first         |           |           |           |           |
-| T18 testStaffNearLimit   | BVA 4.5 | Staff has 13 books checked out; attempt 14th         | 1.1             | Book count -1; staff now has 14 books             |           |           |           |           |
-| T19 testRenewalOverLimit | EP 3.0  | Student with 10 books renewing current               | 0.1             | No change to available copies; due date updated   |           |           |           |           |
-| T20 testSuccessCheckout  | EP 1.2  | Normal checkout with eligible patron and no warnings | 0.0             | Book count -1; patron list updated                |           |           |           |           |
+| T1 testSuspendedPatron   | EP 2.1  | isAccountSuspended == true, book available           | 3.0             | No state change to patron or book                 | ✓         | ✓         | ✓         | ✓         |
+| T2 testFineAtBoundary    | BVA 2.2 | Patron with 10.00 in fines, book available           | 4.1             | No state change                                   | ✓         | ✓         | ✓         | ✓         |
+| T3 testFineBelowBoundary | BVA 2.1 | Patron with 9.00 in fines, book available            | 0.0             | Book count -1; book added to patron checkout list | ✓         | ✗         | ✗         | ✗         |
+| T4 testRenewal           | EP 3.0  | Patron has book checked out                          | 0.1             | Due date reset; no change to available copies     | ✓         | ✓         | ✗         | ✗         |           |           |
+| T5 testOverdueWarnHigh   | BVA 3.4 | Patron with exactly 2 overdue books                  | 1.0             | Book count -1; book added to patron checkout list | ✗         | ✗         | ✗         | ✗         |
+| T6 testStudentOverLimit  | BVA 4.6 | Student has 10 books checked out; attempt 11th       | 3.2             | No state change to book or patron                 | ✓         | ✗         | ✗         | ✓         |           |
+| T7 testChildAtLimit      | BVA 4.1 | Child has 2 books checked out; attempt 3rd           | 1.1             | Book count -1; child now has 3 books              | ✗         | ✗         | ✗         | ✗         |           |           |           |
+| T8 testChildOverLimit    | BVA 4.2 | Child has 3 books checked out; attempt 4th           | 3.2             | No state change                                   | ✓         | ✗         | ✓         | ✓         |
+| T9 testPublicAtLimit     | BVA 4.3 | Public has 4 books checked out; attempt 5th          | 1.1             | Book count -1; public now has 5 books             | ✗         | ✗         | ✓         | ✓         |           |           |
+| T10 testPublicOverLimit  | BVA 4.4 | Public has 5 books checked out; attempt 6th          | 3.2             | No state change                                   | ✓         | ✗         | ✓         | ✓         |           |           |           |
+| T11 testOverdueReject    | BVA 3.3 | Patron has 3 overdue books                           | 4.0             | No state change                                   | ✗         | ✗         | ✗         | ✗         |           |           |           |
+| T12 testBookUnavailable  | EP 1.1  | available copies == 0                                | 2.0             | No state change to patron list                    | ✓         | ✓         | ✓         | ✓         |           |           |           |
+| T13 testReferenceBook    | EP 4.0  | Book not available for checkout (Reference)          | 5.0             | No state change                                   | ✗         | ✗         | ✗         | ✗         |           |           |           |
+| T14 testBookNull         | EP 4.2  | Book object == null                                  | 2.1             | No state change                                   | ✓         | ✓         | ✓         | ✓         |           |           |           |
+| T15 testPatronNull       | EP 4.2  | Patron == null                                       | 3.1             | No state change                                   | ✓         | ✓         | ✓         | ✓         |           |           |           |
+| T16 testPriorityPatron   | EP 4.2  | Both patron == null and book == null                 | 3.1             | No state change; patron checked first             | ✓         | ✗         | ✓         | ✓         |           |           |           |
+| T17 testPatronSuspended  | EP 2.1  | Suspended patron and book == null                    | 3.0             | No state change; checks eligibility first         | ✓         | ✗         | ✓         | ✓         |           |           |           |
+| T18 testStaffNearLimit   | BVA 4.5 | Staff has 13 books checked out; attempt 14th         | 1.1             | Book count -1; staff now has 14 books             | ✗         | ✗         | ✓         | ✓         |           |           |           |
+| T19 testRenewalOverLimit | EP 3.0  | Student with 10 books renewing current               | 0.1             | No change to available copies; due date updated   | ✓         | ✗         | ✗         | ✗         |           |           |           |
+| T20 testSuccessCheckout  | EP 1.2  | Normal checkout with eligible patron and no warnings | 0.0             | Book count -1; patron list updated                | ✗         | ✗         | ✓         | ✓         |           |           |           |
 
 (Add rows until you have at least 20.)
 
@@ -179,83 +183,87 @@ List any easter egg messages you observed:
 - [EASTER EGG #20]: 'Stay in the library, book!'
 - [EASTER EGG #18]: 'Null checking: because null pointer exceptions are not fun.'
 - [EASTER EGG #16]: 'Library staff: because someone has to organize the chaos.'
-
-- 
+- [EASTER EGG #18]: 'Remember to test all the edge cases.'
+- [EASTER EGG #18]: 'The best code is no code at all... but this isn't it.'
 
 
 ### Implementation Results
 
 | Implementation | Bugs Found (count) |
 |----------------|--------------------|
-| Checkout0      |                    |
-| Checkout1      |                    |
-| Checkout2      |                    |
-| Checkout3      |                    |
+| Checkout0      | 7                  |
+| Checkout1      | 13                 |
+| Checkout2      | 9                  |
+| Checkout3      | 6                  |
 
 ### Bugs Discovered
 List distinct bugs you identified for each implementation. Each bug must cite at least one test case that revealed it.
 
-**Checkout0:**
-- Bug 1: Assertion failed with wrong error code (should be 1.0 but returned 0.0) - Revealed by: T5
-- Bug 2: Assertion failed with wrong error code (should be 1.0 but returned 1.1) - Revealed by: T7
-- Bug 3: Assertion failed book count should decrease (from 4 to 3 but was 4) - Revealed by: T9
-- Bug 4: Assertion failed with wrong error code (should be 4.0 but returned 0.0) - Revealed by: T11
-- Bug 5: Assertion failed with wrong error code (should return 5.0 for reference book but returned 2.0) - Revealed by: T12
-- Bug 6: Assertion failed book count should decrease from 5 to 4 but was 5 - Revealed by: T18
-
-**Checkout1:**
+**Checkout0:** 
+- Bug 1: Test failed with wrong return code for overdue checkout (should return 1.0 with warning but returned 0.0 for normal) - Revealed by: T5
+- Bug 2: Test failed with with wrong error code child at limit checkout with warning (should return 1.0 but returned 1.1) - Revealed by: T7
+- Bug 3: Test failed with book count; expected decrease from 4 to 3 but was 4 - Revealed by: T9
+- Bug 4: Test failed with with wrong error code for overdue books (should return warning code 4.0 but returned normal 0.0) - Revealed by: T11
+- Bug 5: Test failed with wrong error code (should return 5.0 for reference book but returned 2.0 fo book unavailable) - Revealed by: T12
+- Bug 6: Test failed with book count should decrease from 5 to 4 but was 5 - Revealed by: T18
+- Bug 7: Test failed with book count should decrease from 5 to 4 but was 5 - Revealed by: T20
+- 
+**Checkout1:** 
 - Bug 1: Expected patron should successfully receive book for checkout but returned false - Revealed by: T3
-- Bug 2: Allowed checkout (return code 0.0) when student exceeded limit - Revealed by: T6
-- Bug 3: Returned wrong error code (should be 3.2 but returned 0.0) - Revealed by: T8
-- Bug 4: Returned wrong error code (should be 3.2 but returned 0.0) - Revealed by: T10
-- Bug 5: Assertion failed with wrong error code (should be 1.0 but returned 0.0) - Revealed by: T5
-- Bug 6: Assertion failed with wrong error code (should be 1.0 but returned 0.0) - Revealed by: T7
-- Bug 7: Assertion failed book count should decrease (from 4 to 3 but was 4) - Revealed by: T9
-- Bug 8: Assertion failed with wrong error code (should be 4.0 but returned 0.0) - Revealed by: T11
-- Bug 9: Assertion failed book count should remain unchanged (expected 5 but was 0) - Revealed by: T12
+- Bug 2: Allowed checkout (return code normal 0.0) when student exceeded limit - Revealed by: T6
+- Bug 3: Returned wrong error code (should return max checkout limit 3.2 but returned normal 0.0) - Revealed by: T8
+- Bug 4: Returned wrong error code (should return max checkout limit 3.2 but returned normal 0.0) - Revealed by: T10
+- Bug 5: Test failed with with wrong error code (should return 1.0 with warning but returned 0.0 for normal) - Revealed by: T5
+- Bug 6: Test failed with with wrong error code (should return 1.0 with warning but returned 0.0 for normal) - Revealed by: T7
+- Bug 7: Test failed with book count should decrease from 4 to 3 but was 4 - Revealed by: T9
+- Bug 8: Test failed with with wrong error code (should return warning code 4.0 but returned 0.0) - Revealed by: T11
+- Bug 9: Test failed with book count should remain unchanged (expected 5 but was 0) - Revealed by: T12
 - Bug 10: Priority Error: Expected suspended before null (expected 3.0 but was 2.1) - Revealed by: T17
 - Bug 10: Priority Error: Expected bull patron before null book (expected 3.0 but was 2.1) - Revealed by: T16
-- Bug 11: Assertion failed: Expected renewal code 0.1 even when at checkout limit but was 0.0 - Revealed by: T19
-- Bug 12: Assertion failed: Expected warning code for staff for 13/14 books at checkout (expected 1.1 but returned 0.0) - Revealed by: T18
+- Bug 11: Test failed: Expected renewal code 0.1 even when at checkout limit but was 0.0 - Revealed by: T19
+- Bug 12: Test failed: Expected warning code for staff for 13/14 books at checkout (expected 1.1 but returned 0.0) - Revealed by: T18
+- Bug 13: Test failed: Expected patron to have book in list (expected true but was false) - Revealed by: T20
 
-**Checkout2:**
+**Checkout2:** 
 - Bug 1: Allowed checkout with wrong error code (should be 3.2 but returned 1.1) - Revealed by: T6
 - Bug 2: Expected book count to decrease (from 5 to 4) but did not - Revealed by: T3
-- Bug 3: Assertion failed with wrong error code (should be 0.1 but returned 0.0) - Revealed by: T4
-- Bug 4: Assertion failed with wrong error code (should be 1.0 but returned 0.0) - Revealed by: T5
-- Bug 5: Assertion failed with wrong error code (should be 1.0 but returned 1.1) - Revealed by: T7
-- Bug 6: Assertion failed with wrong error code (should be 4.0 but returned 0.0) - Revealed by: T11
-- Bug 7: Assertion failed with wrong error code (Should return 2.0 for 0 copies but returned 0.0) - Revealed by: T12
-- Bug 8: Assertion failed book count should remain unchanged (expected 5 but was 0) - Revealed by: T12
+- Bug 3: Test failed with wrong error code (should be 0.1 but returned 0.0) - Revealed by: T4
+- Bug 4: Test failed with wrong error code (should be 1.0 but returned 0.0) - Revealed by: T5
+- Bug 5: Test failed with wrong error code (should be 1.0 but returned 1.1) - Revealed by: T7
+- Bug 6: Test failed with wrong error code (should be 4.0 but returned 0.0) - Revealed by: T11
+- Bug 7: Test failed with wrong error code (Should return 2.0 for 0 copies but returned 0.0) - Revealed by: T12
+- Bug 8: Test failed book count should remain unchanged (expected 5 but was 0) - Revealed by: T12
 - Bug 9: Expected renewal code 0.1 even when at checkout limit but was 0.0 - Revealed by: T19
-
-
 
 **Checkout3:**
 - Bug 1: Copies for renewal should not change (should be 1 but returned 0) - Revealed by: T4
-- Bug 2: Assertion failed with wrong error code (should be 1.0 but returned 0.0) - Revealed by: T5
-- Bug 3: Assertion failed with wrong error code (should be 1.0 but returned 1.1) - Revealed by: T7
-- Bug 4: Assertion failed with wrong error code (should be 4.0 but returned 0.0) - Revealed by: T11
-- Bug 5: Assertion failed book count should remain unchanged (expected 5 but was 0) - Revealed by: T12
+- Bug 2: Test failed with wrong error code (should be 1.0 but returned 0.0) - Revealed by: T5
+- Bug 3: Test failed with wrong error code (should be 1.0 but returned 1.1) - Revealed by: T7
+- Bug 4: Test failed with wrong error code (should be 4.0 but returned 0.0) - Revealed by: T11
+- Bug 5: Test failed book count should remain unchanged (expected 5 but was 0) - Revealed by: T12
 - Bug 6: Expected renewal code 0.1 even when at checkout limit but was 3.2 - Revealed by: T19
-
 
 
 ### Comparative Analysis
 Compare the four implementations:
-- Which bugs are most critical (cause the worst failures)?
-- Which implementation would you use if you had to choose?
-- Why? Justify your choice considering bug severity and frequency.
+- Which bugs are most critical (cause the worst failures)? The bugs that affect the library inventory i.e. allowing patrons to take books without proper checkout methods.
+T6 and T 20 failed limit and normal checkout tests which would be critical for accurate inventory.
+- Which implementation would you use if you had to choose? Checkout 2 or 3 would be viable options 
+- Why? Justify your choice considering bug severity and frequency. Because due to error code failures 
+(non-critical) over critical ones (there are fewer in these two implementations)
 
 ---
 
 ## Part 5: Reflection
 
-**Which testing technique was most effective for finding bugs?**
+**Which testing technique was most effective for finding bugs?** BVA was more efficient and found the most bugs
 
-**What was the most challenging aspect of this assignment? Sorting through what to do; getting organized**
+**What was the most challenging aspect of this assignment?** Sorting through what to do; getting organized. There was a lot to keep track of and bouncing around to reference information
 
-**How did you decide on your EP and BVA? I made a flow diagram first**
+**How did you decide on your EP and BVA?** I made a flow diagram first to identify the most essential methods (i.e. which flow led to return codes and which had variables to check against)
 
-**Describe one test where checking only the return value would NOT have been sufficient to detect a bug.**
+**Describe one test where checking only the return value would NOT have been sufficient to detect a bug.** 
+T3- if I had only checked the return value, I would have missed that book count and patron list 
+were not updated accurately. Even though the system claimed success in Checkout2 with a correct return code (0.0),
+the state verification revealed otherwise.
 
