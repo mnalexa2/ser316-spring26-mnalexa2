@@ -708,26 +708,26 @@ for (int i = 0; i < 2; i++) {
     public void testSuccessCheckout(Class<? extends Checkout> checkoutClass) throws Exception {
         checkout = createCheckout(checkoutClass);
 
-        // 1. Setup: Create a perfectly eligible patron
+        // Setup: Create a perfectly eligible patron
         Patron patron = new Patron("P020", "Perfect Patron", "perfect@edu", Patron.PatronType.STUDENT);
-        // 2. Setup: Create a standard circulating book
+        // Setup: Create a standard circulating book
         Book book = new Book("978-0-000000-20-0", "Standard Fiction", "Author", Book.BookType.FICTION, 5);
 
         checkout.registerPatron(patron);
         checkout.addBook(book);
 
-        // 3. Execute
+        // Execute
         double result = checkout.checkoutBook(book, patron);
 
-        // 4. Verify: Success code 0.0
+        // Verify: Success code 0.0
         assertEquals(0.0, result, 0.01,
                 "Expected success code 0.0 for normal checkout in " + checkoutClass.getSimpleName());
 
-        // 5. State Check: Patron list MUST be updated
+        // State Check: Patron list MUST be updated
         assertTrue(patron.hasBookCheckedOut(book.getIsbn()),
                 "Patron should have the book in their list in " + checkoutClass.getSimpleName());
 
-        // 6. State Check: Book count MUST decrease
+        // State Check: Book count MUST decrease
         assertEquals(4, book.getAvailableCopies(),
                 "Book count should have decreased to 4 in " + checkoutClass.getSimpleName());
     }
