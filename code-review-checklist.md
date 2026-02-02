@@ -20,18 +20,18 @@ Review ALL source files (in main not test) in the project and identify defects u
 
 ## Defect Log
 
-| Defect ID | File          | Line(s) | Category | Description                      | Severity |
-|-----------|---------------|---------|----------|----------------------------------|----------|
-| 1         | Checkout.java | 312     | CS       | Improper variable naming         | low      |
-| 2         | Checkout.java | 242     | FD       | Use of == for typeString         | high     |
-| 3         | Patron.java   | 130     | CG       | Redundant method for suspended   | med      |
-| 4         | Patron.java   | 151     | FD       | missing else block               | med      |
-| 5         | Book.java     | 186     | FD       | set to 100 instead of no. copies | high     |
-| 6         |               |         |          |                                  |          |
-| 7         |               |         |          |                                  |          |
-| 8         |               |         |          |                                  |          |
-| 9         |               |         |          |                                  |          |
-| 10        |               |         |          |                                  |          |
+| Defect ID | File          | Line(s) | Category | Description                                                      | Severity |
+|-----------|---------------|---------|----------|------------------------------------------------------------------|----------|
+| 1         | Checkout.java | 312     | CS       | Improper variable naming                                         | low      |
+| 2         | Checkout.java | 242     | FD       | Use of == for typeString                                         | high     |
+| 3         | Patron.java   | 130     | CG       | Redundant method for suspended                                   | med      |
+| 4         | Patron.java   | 151     | FD       | missing else block                                               | med      |
+| 5         | Book.java     | 186     | FD       | set to 100 instead of no. copies                                 | high     |
+| 6         | Book.java     | 9-11    | CS       | variables should be identified as final for immutability         | low      |
+| 7         | Book.java     | 1-2     | MD       | unused import statements                                         | low      |
+| 8         | Patron.java   | 96-108  | CG       | can replace switch statement with enhanced for better formatting | med      |
+| 9         | Checkout.java | 282-85  | FD       | Array list not populated                                         | high     |
+| 10        |               |         |          |                                                                  |          |
 
 **Severity Levels:**
 - **Critical**: Causes system failure, data corruption, or security issues
