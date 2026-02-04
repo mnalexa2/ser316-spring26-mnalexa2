@@ -349,21 +349,21 @@ public class Checkout {
      */
     public int countBooksByType(Book.BookType type, boolean onlyAvailable) {
 
-        if (type == null) {
+        if (type == null) { // If there is no book of that type, return 0 and exit
             return 0;
         }
-
+        // If there is a book of that type, set variable
         int looped = 0;
 
         // Loop through all books in inventory
         for (Book b : bookList.values()) {
 
-            if (b == null) {
+            if (b == null) { // If book is null, continue looping;If book is found (not null), go to if statement
                 continue;
             }
 
             // Check if book matches the requested type
-            if (b.getType() == type) {
+            if (b.getType() == type) { //if the requested type is found, go to next if statement, if not, go back to loop
                 // Nested condition: filter by availability if requested
                 if (onlyAvailable) {
                     // Only count if book has available copies
