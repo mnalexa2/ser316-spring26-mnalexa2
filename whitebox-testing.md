@@ -2,7 +2,7 @@
 
 **Student Name:** Michelle N. Alexander
 **ASU ID:** mnalexa2
-**Date:** 3 February 2026
+**Date:** 4 February 2026
 
 ---
 
@@ -76,14 +76,14 @@ List the sequences needed for complete edge coverage:
 **Before additional tests:**
 - **Branch Coverage:** 75%
 
-**After reaching 80% branch coverage:**
-- **Branch Coverage:** ___%
-- **Tests added:**
+**After reaching 60% branch coverage:**
+- **Branch Coverage:** 75%
+- **Tests added: testCalculateFine_Branches() and testIsValidISBN_Branches()**
 
 ### Final Overall Coverage
 
-- **Line Coverage:** ___%
-- **Branch Coverage:** ___%
+- **Line Coverage:** 71%
+- **Branch Coverage:** 67%
 
 ---
 
@@ -91,20 +91,26 @@ List the sequences needed for complete edge coverage:
 
 ### Test-Driven Development Process
 
-**Number of tests from BlackBox assignment:** ___
+**Number of tests from BlackBox assignment:** 20
 
 **Implementation challenges:**
-1.
-2.
+1. getting assert values correct and managing correct return codes
+2. correctly updating available copies
 
-**All tests passing:** [Yes/No]
+**All tests passing:** Yes
 
 ---
 
 ## Part 4: Reflection
 
 **How did white-box testing differ from black-box testing?**
+It was much easier and cleaner to implement since it was based on what code is being written and defined paths, rather than 
+how the code should perform. It also helps with code efficiency to find bugs or unused code.
 
 **Which approach do you find more effective? Why?**
+For myself, I found the Whitebox testing more effective, even though it may be harder to meet requirements, 
+I think the efficiency in the time it takes is valuable.
 
 **Would you prefer TDD or implementation first test later? Why?**
+I prefer the implementation first because I am a visual person so connecting the flow with what needs to be implemented is just 
+more beneficial, but it is risky because you may do a lot of work before you realize something is missed. 

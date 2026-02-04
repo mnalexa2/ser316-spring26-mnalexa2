@@ -51,5 +51,27 @@ public class CheckoutWhiteBoxSample {
         int result = checkout.countBooksByType(Book.BookType.FICTION, false);
         assertEquals(1, result, "Should count book regardless of availability");
     }
+    // Additional testing - fines
+    @Test
+    @DisplayName("WB Test: calculateFine - tiered fine and max")
+    public void testCalculateFine_Branches() {
+        // within first seven days
+        assertEquals(1.75, checkout.calculateFine(7, Book.BookType.FICTION), 0.01);
+        assertEquals(11.25, checkout.calculateFine(20, Book.BookType.FICTION), 0.01);
+        assertEquals(25.00, checkout.calculateFine(50, Book.BookType.FICTION), 0.01);
+    }
+    // Additional testing - valid ISBN
+    @Test
+    @DisplayName("WB Test: isValidISBN - valid ISBN")
+    public void testIsValidISBN_Branches() {
+        assertFalse(checkout.isValidISBN(null)); // null value
+        assertFalse(checkout.isValidISBN("")); // empty
+
+        assertTrue(checkout.isValidISBN("0123456789")); // 10 digit
+        assertTrue(checkout.isValidISBN("978-0-1234-5678-9")); // 13 digit
+
+        assertFalse(checkout.isValidISBN("978-INVALID")); // invalid characters
+        assertFalse(checkout.isValidISBN("12345")); // invalid length
+    }
 
 }
