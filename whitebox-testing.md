@@ -58,7 +58,7 @@ List the sequences needed for complete edge coverage:
 
 **Sequence 3:**
 - **Edges covered: 361->362, 362->359, 366->359, 368->373, 373->375, 375->359, 370->359**
-- **Test case:countBooksByType(null, true) with one ull book, mismatch book type, and unavailable fiction; onlyAvailable = false**
+- **Test case: countBooksByType(Book.BookType.FICTION, false) with one null book, mismatch book type, and unavailable fiction**
 
 
 ---
@@ -68,13 +68,13 @@ List the sequences needed for complete edge coverage:
 ### Initial Coverage for Checkout.java
 
 **Before adding tests:**
-- **Line Coverage:** ___%
-- **Branch Coverage:** ___%
+- **Line Coverage:** 48%
+- **Branch Coverage:** 46%
 
 ### Coverage for countBooksByType()
 
 **Before additional tests:**
-- **Branch Coverage:** ___%
+- **Branch Coverage:** 75%
 
 **After reaching 80% branch coverage:**
 - **Branch Coverage:** ___%
