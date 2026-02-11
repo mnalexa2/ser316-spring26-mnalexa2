@@ -2,4 +2,11 @@
 *.class
 build/
 .gradle/
+bin/
 .idea/
+*.iml
+*.iws
+.project
+.classpath
+.settings/
+.vscode/
