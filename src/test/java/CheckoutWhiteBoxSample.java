@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * - Statement coverage
  * - Branch coverage
  * - Path coverage
- *
+
  * White-box testing focuses on testing the IMPLEMENTATION by
  * examining the code structure and ensuring all paths are tested.
  */
@@ -23,12 +23,55 @@ public class CheckoutWhiteBoxSample {
         checkout = new Checkout();
     }
 
+    //Sequence 1
     @Test
     @DisplayName("WB Test: countBooksByType - null type branch")
-    public void testCountBooksByType_NullType() {
-        // Branch: type == null → TRUE
-        int result = checkout.countBooksByType(null, false);
+    public void testCountBooksByType_Sequence1() {
+        // Branch: type == null; return 0;
+        int result = checkout.countBooksByType(null, true);
         assertEquals(0, result, "Should return 0 for null type");
+    }
+    //Sequence 2
+    @Test
+    @DisplayName("WB Test: countBooksByType - available matching book")
+    public void testCountBooksByType_Sequence2() {
+        // Branch: type == FICTION;
+        Book availableBook = new Book("978-0-1234-5678-9", "Harry Potter and the Sorcerer's Stone", "J.K. Rowling", Book.BookType.FICTION, 1);
+        checkout.addBook(availableBook);
+
+        int result = checkout.countBooksByType(Book.BookType.FICTION, true);
+        assertEquals(1, result, "Should return 1 available fiction book");
+    }
+    //Sequence 3
+    @Test
+    @DisplayName("WB Test: countBooksByType - continue and else availability")
+    public void testCountBooksByType_Sequence3() {
+        // Branch: type == null; else
+        checkout.addBook(new Book("123-0-6789-1234-9", "Harry Potter and the Chamber of Secrets", "J.K. Rowling", Book.BookType.FICTION, 0));
+        int result = checkout.countBooksByType(Book.BookType.FICTION, false);
+        assertEquals(1, result, "Should count book regardless of availability");
+    }
+    // Additional testing - fines
+    @Test
+    @DisplayName("WB Test: calculateFine - tiered fine and max")
+    public void testCalculateFine_Branches() {
+        // within first seven days
+        assertEquals(1.75, checkout.calculateFine(7, Book.BookType.FICTION), 0.01);
+        assertEquals(11.25, checkout.calculateFine(20, Book.BookType.FICTION), 0.01);
+        assertEquals(25.00, checkout.calculateFine(50, Book.BookType.FICTION), 0.01);
+    }
+    // Additional testing - valid ISBN
+    @Test
+    @DisplayName("WB Test: isValidISBN - valid ISBN")
+    public void testIsValidISBN_Branches() {
+        assertFalse(checkout.isValidISBN(null)); // null value
+        assertFalse(checkout.isValidISBN("")); // empty
+
+        assertTrue(checkout.isValidISBN("0123456789")); // 10 digit
+        assertTrue(checkout.isValidISBN("978-0-1234-5678-9")); // 13 digit
+
+        assertFalse(checkout.isValidISBN("978-INVALID")); // invalid characters
+        assertFalse(checkout.isValidISBN("12345")); // invalid length
     }
 
 }
