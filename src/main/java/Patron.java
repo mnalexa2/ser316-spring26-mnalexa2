@@ -93,20 +93,14 @@ public class Patron {
      * @return Maximum checkout limit
      */
     public int getMaxCheckoutLimit() {
-        switch (type) {
-            case FACULTY:
-                return 20;
-            case STAFF:
-                return 15;
-            case STUDENT:
-                return 10;
-            case PUBLIC:
-                return 5;
-            case CHILD:
-                return 3;
-            default:
-                return 5;
-        }
+        return switch (type) {
+            case FACULTY -> 20;
+            case STAFF -> 15;
+            case STUDENT -> 10;
+            case PUBLIC -> 5;
+            case CHILD -> 3;
+            default -> 5;
+        };
     }
 
     /**
