@@ -352,8 +352,13 @@ public class Checkout {
         if (type == null) { // If there is no book of that type, return 0 and exit
             return 0;
         }
+Review
+
+        int count = 0;
+
         // If there is a book of that type, set variable
         int looped = 0;
+ main
 
         // Loop through all books in inventory
         for (Book b : bookList.values()) {
@@ -368,16 +373,16 @@ public class Checkout {
                 if (onlyAvailable) {
                     // Only count if book has available copies
                     if (b.isAvailable()) {
-                        looped++;
+                        count++;
                     }
                 } else {
                     // Count all books of this type regardless of availability
-                    looped++;
+                    count++;
                 }
             }
         }
 
-        return looped;
+        return count;
     }
 
     public Map<String, Book> getInventory() {
