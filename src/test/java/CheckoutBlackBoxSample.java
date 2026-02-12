@@ -15,14 +15,14 @@ import static org.junit.jupiter.api.Assertions.*;
  * - Equivalence Partitioning (EP)
  * - Boundary Value Analysis (BVA)
  * - Parametrized tests across multiple implementations
- *
+
  * Black-box testing focuses on testing the SPECIFICATION WITHOUT
  * looking at the implementation.
- *
- * The parameterized structure allows testing all Checkout implementations
+
+ * The parametrized structure allows testing all Checkout implementations
  * with the same tests to identify which implementations have bugs.
  */
-public class CheckoutBlackboxSample {
+public class CheckoutBlackBoxSample {
 
     private Checkout checkout;
 
@@ -31,19 +31,19 @@ public class CheckoutBlackboxSample {
      * Each test will run against ALL implementations.
      */
     @SuppressWarnings("unchecked")
-    static Stream<Class<? extends Checkout>> checkoutClassProvider() {
-        return (Stream<Class<? extends Checkout>>) Stream.of(
-                Checkout0.class,
-                Checkout1.class,
-                Checkout2.class,
-                Checkout3.class
-        );
-    }
-
-    // Uncomment when you implement the method in assign 3 and comment the above
 //    static Stream<Class<? extends Checkout>> checkoutClassProvider() {
-//        return Stream.of(Checkout.class);
+//        return (Stream<Class<? extends Checkout>>) Stream.of(
+//                Checkout0.class,
+//                Checkout1.class,
+//                Checkout2.class,
+//                Checkout3.class
+//        );
 //    }
+
+    //Uncomment when you implement the method in assign 3 and comment the above
+    static Stream<Class<? extends Checkout>> checkoutClassProvider() {
+        return Stream.of(Checkout.class);
+    }
 
 
     /**
@@ -168,13 +168,13 @@ public class CheckoutBlackboxSample {
 
         assertTrue(patron.hasBookCheckedOut(book.getIsbn()),
                 "Patron should successfully receive book for " + checkoutClass.getSimpleName());
-        assertEquals(5, book.getAvailableCopies(),
+        assertEquals(4, book.getAvailableCopies(),
                 "Book count should decrease by one for successful checkout in " + checkoutClass.getSimpleName());
     }
 
     /**
      * TEST 4: Checks if patron has book checked out
-     * This tests an invalid equivalence partition.
+     * These tests an invalid equivalence partition.
      */
 @ParameterizedTest
 @MethodSource("checkoutClassProvider")
@@ -212,31 +212,32 @@ public void testRenewal(Class<? extends Checkout> checkoutClass) throws Exceptio
         // Setup: Create patron with book
         Patron patron = new Patron("S005", "Overdue Patron", "test@example.com",
                 Patron.PatronType.STUDENT);
-        Book bookToBorrow = new Book("978-0-123456-78-9", "Test Book",
+        Book bookToBorrow = new Book("978-0-OVERDU-78-9", "OD Book",
                 "Test Author", Book.BookType.FICTION, 5);
+
 
         checkout.registerPatron(patron);
         checkout.addBook(bookToBorrow);
 
-for (int i = 0; i < 2; i++) {
-    Book overdueBook = new Book("978-0-123456-78-9" + i, "Overdue Book " + i, "Author", Book.BookType.FICTION, 1);
-    checkout.addBook(overdueBook);
+        for (int i = 0; i < 2; i++) {
+            Book overdueBook = new Book("OVERDUE-1" + i, "Overdue Book " + i, "Author", Book.BookType.FICTION, 1);
+            checkout.addBook(overdueBook);
 
-    patron.addCheckedOutBook(overdueBook.getIsbn(), LocalDate.now().minusDays(1));
-    // Set status to overdue
-    patron.getCheckedOutBooks().put(overdueBook.getIsbn(), LocalDate.now().minusDays(1));
-}
+            patron.addCheckedOutBook(overdueBook.getIsbn(), LocalDate.now().minusDays(1));
+        }
+        // Set status to overdue
+        patron.setOverdueCount(2);
         double result = checkout.checkoutBook(bookToBorrow, patron);
 
         // Verify: Should return 1.0 and warning
-        assertEquals(1.0, result, 0.01,
-                "Expected warning code 1.0 for 2 overdue books for " + checkoutClass.getSimpleName());
-        // State check: Checkout successful
-        assertTrue(patron.hasBookCheckedOut(bookToBorrow.getIsbn()),
-                "Patron SHOULD successfully receive book with warning for " + checkoutClass.getSimpleName());
-        // State check: Decrement book count from 5 to 4
-        assertEquals(4, bookToBorrow.getAvailableCopies(),
-                "Book count should decrease to 4 in " + checkoutClass.getSimpleName());
+            assertEquals(1.0, result, 0.01,
+                    "Expected warning code 1.0 for 2 overdue books for " + checkoutClass.getSimpleName());
+            // State check: Checkout successful
+            assertTrue(patron.hasBookCheckedOut(bookToBorrow.getIsbn()),
+                    "Patron SHOULD successfully receive book with warning for " + checkoutClass.getSimpleName());
+            // State check: Decrement book count from 5 to 4
+            assertEquals(4, bookToBorrow.getAvailableCopies(),
+                    "Book count should decrease to 4 in " + checkoutClass.getSimpleName());
     }
 
     /**
@@ -419,7 +420,7 @@ for (int i = 0; i < 2; i++) {
 
         double result = checkout.checkoutBook(sixthBook, patron);
 
-        // Verify: Should retuen 3.2 for exceeding limit
+        // Verify: Should return 3.2 for exceeding limit
         assertEquals(3.2, result, 0.01,
                 "Expected error code 3.2 for exceeding public checkout limit for" + checkoutClass.getSimpleName());
 
@@ -435,7 +436,7 @@ for (int i = 0; i < 2; i++) {
      */
     @ParameterizedTest
     @MethodSource("checkoutClassProvider")
-    @DisplayName("T5: Patron rejection for 3 overdue books return code 4.0")
+    @DisplayName("T11: Patron rejection for 3 overdue books return code 4.0")
     public void testOverdueReject(Class<? extends Checkout> checkoutClass) throws Exception {
         checkout = createCheckout(checkoutClass);
 
@@ -448,19 +449,15 @@ for (int i = 0; i < 2; i++) {
         checkout.registerPatron(patron);
         checkout.addBook(bookToBorrow);
 
-        for (int i = 0; i < 3; i++) {
-            Book overdueBook = new Book("978-0-123456-78-9" + i, "Overdue Book " + i, "Author", Book.BookType.TEXTBOOK, 5);
-            checkout.addBook(overdueBook);
-
-            patron.addCheckedOutBook(overdueBook.getIsbn(), LocalDate.now().minusDays(1));
-            }
+        patron.setOverdueCount(3);
         double result = checkout.checkoutBook(bookToBorrow, patron);
+
 
         // Verify: Should return 1.0 and warning
         assertEquals(4.0, result, 0.01,
                 "Expected warning code 4.0 for 3 overdue books for " + checkoutClass.getSimpleName());
         // State check: Checkout successful
-        assertTrue(patron.hasBookCheckedOut(bookToBorrow.getIsbn()),
+        assertFalse(patron.hasBookCheckedOut(bookToBorrow.getIsbn()),
                 "Patron should NOT receive book when they have 3 overdue books in " + checkoutClass.getSimpleName());
         // State check: Decrement book count from 5 to 4
         assertEquals(5, bookToBorrow.getAvailableCopies(),
@@ -468,7 +465,7 @@ for (int i = 0; i < 2; i++) {
     }
 
     /**
-     * T12: Attempt to checkout unavailable book
+     * T12: Attempt to check out unavailable book
      * Tests attempts checkout a book with availableCopies == 0
      */
     @ParameterizedTest
@@ -520,7 +517,7 @@ for (int i = 0; i < 2; i++) {
 
         // State Check: Rejection (No changes)
         assertFalse(patron.hasBookCheckedOut(book.getIsbn()), "Patron should NOT receive a reference book");
-        assertEquals(5, book.getAvailableCopies(), "Book count must remain unchanged");
+        assertEquals(0, book.getAvailableCopies(), "Reference books are initialized with 0 copies");
     }
 
     /**
@@ -599,7 +596,7 @@ for (int i = 0; i < 2; i++) {
     public void testSuspendedPatronPriority(Class<? extends Checkout> checkoutClass) throws Exception {
         checkout = createCheckout(checkoutClass);
 
-        // Setup: Suspended Patron but uull Book
+        // Setup: Suspended Patron but null Book
         Patron suspendedPatron = new Patron("P017", "Suspended", "test@edu", Patron.PatronType.STUDENT);
         suspendedPatron.setAccountSuspended(true);
         checkout.registerPatron(suspendedPatron);
@@ -640,7 +637,7 @@ for (int i = 0; i < 2; i++) {
         // Execute
         double result = checkout.checkoutBook(fourteenthBook, patron);
 
-        // Verify: retuen code 1.1 for Staff approaching limit
+        // Verify: return code 1.1 for Staff approaching limit
         assertEquals(1.1, result, 0.01,
                 "Expected warning code 1.1 for Staff at 13/14 books in " + checkoutClass.getSimpleName());
 
